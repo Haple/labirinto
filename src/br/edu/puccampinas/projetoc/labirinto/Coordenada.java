@@ -1,36 +1,33 @@
 package br.edu.puccampinas.projetoc.labirinto;
 
 /**
- * Essa coordenada representa pares ordenados de números contidos no conjunto dos números naturais.
- * Números negativos ou fracionários não serão aceitos.
- * 
- * O plano representado por coordenadas desse tipo é equivalente ao primeiro quadrante de um plano
- * cartesiano.
+ * É uma posição de um labirinto, representada por uma linha e uma coluna (números do conjunto dos
+ * números naturais).
  * 
  * @author aleph
  *
  */
 public class Coordenada {
 
-  private Integer x;
-  private Integer y;
+  private Integer linha;
+  private Integer coluna;
 
   /**
-   * Gera e inicializa uma coordenada na origem do plano cartesiano (0,0)
+   * Constrói uma coordenada na origem (0,0) do plano cartesiano
    */
   public Coordenada() {
-    this.x = 0;
-    this.y = 0;
+    this.linha = 0;
+    this.coluna = 0;
   }
 
   /**
-   * Gera e inicializa uma coordenada com a mesma posição de uma coordenada específica
+   * Constrói uma coordenada com a mesma posição de uma coordenada específica
    * 
    * @param c Uma coordenada
    */
   public Coordenada(Coordenada c) {
-    this.x = c.getX();
-    this.y = c.getY();
+    this.linha = c.getLinha();
+    this.coluna = c.getColuna();
   }
 
   /**
@@ -50,7 +47,7 @@ public class Coordenada {
   }
 
   /**
-   * Gera e inicializa uma coordenada em uma posição específica do plano
+   * Constrói uma coordenada em uma posição específica do plano
    * 
    * @param x Representa o plano horizontal da coordenada
    * @param y Representa o plano vertical da coordenada
@@ -58,43 +55,43 @@ public class Coordenada {
    */
   public Coordenada(Integer x, Integer y) throws IllegalArgumentException {
     valida(x, y);
-    this.x = x;
-    this.y = y;
+    this.linha = x;
+    this.coluna = y;
   }
 
 
   /**
    * Troca a posição de uma coordenada
    * 
-   * @param x Representa o plano horizontal da coordenada
-   * @param y Representa o plano vertical da coordenada
+   * @param linha Representa o plano horizontal da coordenada
+   * @param coluna Representa o plano vertical da coordenada
    * @throws IllegalArgumentException Caso a coordenada tenha números negativos
    */
-  public void setPosicao(Integer x, Integer y) throws IllegalArgumentException {
-    valida(x, y);
-    this.x = x;
-    this.y = y;
+  public void setPosicao(Integer linha, Integer coluna) throws IllegalArgumentException {
+    valida(linha, coluna);
+    this.linha = linha;
+    this.coluna = coluna;
   }
 
-  public Integer getX() {
-    return x;
+  public Integer getLinha() {
+    return linha;
   }
 
-  public Integer getY() {
-    return y;
+  public Integer getColuna() {
+    return coluna;
   }
 
   @Override
   public String toString() {
-    return "Coordenada [x=" + x + ", y=" + y + "]";
+    return "Coordenada [linha=" + linha + ", coluna=" + coluna + "]";
   }
 
   @Override
   public int hashCode() {
     final int prime = 31;
     int result = 1;
-    result = prime * result + ((x == null) ? 0 : x.hashCode());
-    result = prime * result + ((y == null) ? 0 : y.hashCode());
+    result = prime * result + ((linha == null) ? 0 : linha.hashCode());
+    result = prime * result + ((coluna == null) ? 0 : coluna.hashCode());
     return result;
   }
 
@@ -107,15 +104,15 @@ public class Coordenada {
     if (getClass() != obj.getClass())
       return false;
     Coordenada other = (Coordenada) obj;
-    if (x == null) {
-      if (other.x != null)
+    if (linha == null) {
+      if (other.linha != null)
         return false;
-    } else if (!x.equals(other.x))
+    } else if (!linha.equals(other.linha))
       return false;
-    if (y == null) {
-      if (other.y != null)
+    if (coluna == null) {
+      if (other.coluna != null)
         return false;
-    } else if (!y.equals(other.y))
+    } else if (!coluna.equals(other.coluna))
       return false;
     return true;
   }
