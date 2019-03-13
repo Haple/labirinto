@@ -13,15 +13,27 @@ import java.util.NoSuchElementException;
 public class Pilha<T> {
   private T[] vetor;
   private int total;
+  private final int capacidadePadrao = 10;
 
   /**
-   * Construtor de uma Pilha
+   * Constrói uma pilha com a capacidade inicial especificada
    * 
    * @param capacidade Quantidade de posições que a pilha deve ter
    */
   @SuppressWarnings("unchecked")
   public Pilha(int capacidade) {
     this.vetor = (T[]) new Object[capacidade];
+    this.total = 0;
+  }
+
+  /**
+   * Constrói uma pilha com a capacidade inicial especificada
+   * 
+   * @param capacidade Quantidade de posições que a pilha deve ter
+   */
+  @SuppressWarnings("unchecked")
+  public Pilha() {
+    this.vetor = (T[]) new Object[this.capacidadePadrao];
     this.total = 0;
   }
 
@@ -43,10 +55,11 @@ public class Pilha<T> {
    * 
    * @param capacidade throws IllegalArgumentException
    */
+  @SuppressWarnings("unchecked")
   private void setCapacidade(Integer capacidade) {
-    if (capacidade <= 0) {
+    if (capacidade < 1) {
       throw new IllegalArgumentException(
-          "Não é possível criar uma pilha com capacidade negativa ou igual a zero.");
+          "Não é possível criar uma pilha com capacidade menor que 1.");
     }
     T[] vetorTemp = (T[]) new Object[capacidade];
     System.arraycopy(this.vetor, 0, vetorTemp, 0, this.total);
@@ -57,13 +70,13 @@ public class Pilha<T> {
    * Desempilha o valor no topo da pilha
    * 
    * @return devolve o valor desempilhado
+   * @throws NoSuchElementException Caso a pilha esteja vazia
    */
   public T desempilhar() {
-    if (this.pilhaVazia()) {
+    if (this.total == 0) {
       throw new NoSuchElementException("Não é possível desempilhar uma pilha vazia!");
     }
-    this.total--;
-    return this.vetor[this.total];
+    return this.vetor[--this.total];
   }
 
   /**
@@ -79,11 +92,11 @@ public class Pilha<T> {
    * Exibe o elemento no topo da pilha
    * 
    * @return devolve o valor no topo da pilha, sem deletá-lo
-   * @throws PilhaVaziaException
+   * @throws NoSuchElementException Caso a pilha esteja vazia
    */
-  public T exibeTopo() throws PilhaVaziaException {
-    if (this.pilhaVazia()) {
-      throw new PilhaVaziaException("Não é possível exibir o topo de uma pilha vazia!");
+  public T exibeTopo() {
+    if (this.total == 0) {
+      throw new NoSuchElementException("Não é possível exibir o topo de uma pilha vazia!");
     }
     return this.vetor[this.total - 1];
   }
@@ -111,6 +124,11 @@ public class Pilha<T> {
     if (total != other.total)
       return false;
     return true;
+  }
+
+  @Override
+  public String toString() {
+    return Arrays.toString(vetor);
   }
 
 

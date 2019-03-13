@@ -3,16 +3,14 @@ package br.edu.puccampinas.projetoc.labirinto;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
 
 public class Labirinto {
 
   private Coordenada atual;
   private String[][] mapa;
   private Integer numLinhas;
+  private Integer numColunas;
 
   /**
    * Cria um labirinto
@@ -23,8 +21,7 @@ public class Labirinto {
   public Labirinto(String caminho) throws CarregamentoException {
     this.atual = new Coordenada();
     load(caminho);
-    extractEnterDoor();
-    System.out.println(Arrays.deepToString(this.mapa));
+    loadEntrance();
   }
 
   /**
@@ -37,7 +34,8 @@ public class Labirinto {
     try (BufferedReader br = new BufferedReader(new FileReader(caminho))) {
       this.numLinhas = Integer.parseInt(br.readLine());
       String[] primeiraLinha = br.readLine().split("");
-      this.mapa = new String[numLinhas][primeiraLinha.length];
+      this.numColunas = primeiraLinha.length;
+      this.mapa = new String[this.numLinhas][this.numColunas];
       this.mapa[0] = primeiraLinha;
       for (int i = 1; i < numLinhas; i++) {
         String[] values = br.readLine().split("");
@@ -56,15 +54,31 @@ public class Labirinto {
     }
   }
 
-  private void extractEnterDoor() {
-    // Primeira coluna
-//    for (int i = 0; i < this.numLinhas; i++) {
-//      System.out.println(this.mapa[i][0]);
-//    }
-    // Última coluna
+  /**
+   * Carrega a entrada do labirinto
+   */
+  private void loadEntrance() {
     for (int i = 0; i < this.numLinhas; i++) {
-      System.out.println(this.mapa[i][this.mapa.length + 1]);
+      for (int j = 0; j < this.numColunas; j++) {
+        if (i == 0 || j == 0 || i == this.numLinhas - 1 || j == this.numColunas - 1) {
+          String atual = this.mapa[i][j];
+          if (atual == "E") {
+            this.atual = new Coordenada(i, j);
+          }
+        }
+      }
     }
   }
+
+  @Override
+  public String toString() {
+    String mapa = "";
+    for (String[] linha : this.mapa) {
+      mapa += Arrays.toString(linha) + "\n";
+    }
+    return mapa;
+  }
+
+
 
 }
