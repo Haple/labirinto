@@ -132,7 +132,7 @@ public class Pilha<T> {
 
   @Override
   public String toString() {
-    return "Pilha [total=" + total + ", topo=" + this.exibeTopo() + "]";
+    return "Pilha [total=" + total + ", topo=" + (total > 0 ? this.exibeTopo() : "") + "]";
   }
 
 
