@@ -56,7 +56,7 @@ public class Pilha<T> {
    * @param capacidade throws IllegalArgumentException
    */
   @SuppressWarnings("unchecked")
-  private void setCapacidade(Integer capacidade) {
+  private void setCapacidade(Integer capacidade) throws IllegalArgumentException {
     if (capacidade < 1) {
       throw new IllegalArgumentException(
           "Não é possível criar uma pilha com capacidade menor que 1.");
@@ -72,7 +72,7 @@ public class Pilha<T> {
    * @return devolve o valor desempilhado
    * @throws NoSuchElementException Caso a pilha esteja vazia
    */
-  public T desempilhar() {
+  public T desempilhar() throws NoSuchElementException {
     if (this.total == 0) {
       throw new NoSuchElementException("Não é possível desempilhar uma pilha vazia!");
     }
@@ -94,11 +94,15 @@ public class Pilha<T> {
    * @return devolve o valor no topo da pilha, sem deletá-lo
    * @throws NoSuchElementException Caso a pilha esteja vazia
    */
-  public T exibeTopo() {
+  public T exibeTopo() throws NoSuchElementException {
     if (this.total == 0) {
       throw new NoSuchElementException("Não é possível exibir o topo de uma pilha vazia!");
     }
     return this.vetor[this.total - 1];
+  }
+
+  public int getTotal() {
+    return total;
   }
 
   @Override
@@ -128,7 +132,7 @@ public class Pilha<T> {
 
   @Override
   public String toString() {
-    return Arrays.toString(vetor);
+    return "Pilha [total=" + total + ", topo=" + this.exibeTopo() + "]";
   }
 
 

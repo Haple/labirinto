@@ -6,8 +6,19 @@ import java.io.IOException;
 import java.util.Arrays;
 import java.util.NoSuchElementException;
 
+import br.edu.puccampinas.projetoc.pilha.Pilha;
+
 public class Labirinto {
 
+  private final static char ENTRADA = 'E';
+  private final static char SAIDA = 'S';
+  private final static char PASSAGEM = ' ';
+  private final static char PAREDE = '#';
+  private final static char PASSO = '*';
+  private boolean avancar = true;
+
+  private Pilha<Coordenada> caminho;
+  private Pilha<Pilha<Coordenada>> possibilidades;
   private Coordenada atual;
   private char[][] mapa;
   private Integer numLinhas;
@@ -22,15 +33,17 @@ public class Labirinto {
   public Labirinto(String caminho) throws CarregamentoException {
     loadMap(caminho);
     try {
-      this.atual = findOnBorders('E');
+      this.atual = findOnBorders(ENTRADA);
     } catch (NoSuchElementException e) {
       throw new CarregamentoException("Não foi possível encontrar a entrada (E) do labirinto.");
     }
     try {
-      findOnBorders('S');
+      findOnBorders(SAIDA);
     } catch (NoSuchElementException e) {
       throw new CarregamentoException("Não foi possível encontrar a saída (S) do labirinto.");
     }
+    this.caminho = new Pilha<Coordenada>(numColunas * numLinhas);
+    this.possibilidades = new Pilha<Pilha<Coordenada>>(numColunas * numLinhas);
   }
 
   /**
@@ -56,6 +69,7 @@ public class Labirinto {
           throw new CarregamentoException("A linha número " + (i + 1)
               + " não possui o número correto de colunas (" + this.mapa[0].length + ").");
         }
+        checkRowCells(values);
         this.mapa[i] = values;
       }
     } catch (IOException e) {
@@ -67,17 +81,36 @@ public class Labirinto {
   }
 
   /**
+   * Verifica se as células de uma linha possuem caracteres válidos
+   * 
+   * @param values Células de uma linha do labirinto
+   * @throws CarregamentoException Caso seja encontrado um caracter inválido
+   */
+  private void checkRowCells(char[] values) throws CarregamentoException {
+    for (char c : values) {
+      if (c != PAREDE && c != PASSAGEM && c != ENTRADA && c != SAIDA) {
+        throw new CarregamentoException("O caracter \"" + c + "\" não é permitido.");
+      }
+    }
+  }
+
+  /**
    * Busca um elemento nas bordas do labirinto
    * 
-   * @param elemento
+   * @param elemento Um caracter que represente um elemento do labirinto
    * @return Devolve a @Coordenada com a posição do elemento encontrado
+   * @throws CarregamentoException Caso haja espaços nas paredes
    * @throws NoSuchElementException Caso o elemento não seja encontrado
    */
-  private Coordenada findOnBorders(char elemento) {
+  private Coordenada findOnBorders(char elemento) throws CarregamentoException {
     for (int i = 0; i < this.numLinhas; i++) {
       for (int j = 0; j < this.numColunas; j++) {
         if (i == 0 || j == 0 || i == this.numLinhas - 1 || j == this.numColunas - 1) {
           char atual = this.mapa[i][j];
+          if (atual == PASSAGEM) {
+            throw new CarregamentoException(
+                "Retire a passagem da parede lateral " + new Coordenada(i, j) + ".");
+          }
           if (atual == elemento) {
             return new Coordenada(i, j);
           }
@@ -86,6 +119,103 @@ public class Labirinto {
     }
     throw new NoSuchElementException(
         "Não foi possível encontrar o elemento " + elemento + " no labirinto.");
+  }
+
+  /**
+   * Busca a saída do labirinto
+   * 
+   * @throws BuscaException Caso não seja possível encontrar uma saída
+   */
+  public void findExit() throws BuscaException {
+    char casaAtual;
+    do {
+      System.out.println(this.toString());
+      Pilha<Coordenada> adjacentes = lookAround();
+      if (this.avancar) {
+        forward(adjacentes);
+      } else {
+        reverse();
+      }
+      casaAtual = mapa[this.atual.getLinha()][this.atual.getColuna()];
+    } while (casaAtual != SAIDA);
+  }
+
+  /**
+   * Olha ao redor da casa atual procurando casas que indiquem caminho livre ou saída
+   * 
+   * @return Devolve uma pilha com as cordenadas das casas adjacentes e válidas.
+   */
+  private Pilha<Coordenada> lookAround() {
+    Pilha<Coordenada> adjacentes = new Pilha<Coordenada>(3);
+    int xAtual = this.atual.getLinha();
+    int yAtual = this.atual.getColuna();
+    char acima = xAtual == 0 ? PAREDE : this.mapa[xAtual - 1][yAtual];
+    if (acima == PASSAGEM || acima == SAIDA) {
+      adjacentes.empilhar(new Coordenada(xAtual - 1, yAtual));
+      // this.PASSO = '↑';
+    }
+    char abaixo = xAtual == this.numLinhas - 1 ? PAREDE : this.mapa[xAtual + 1][yAtual];
+    if (abaixo == PASSAGEM || abaixo == SAIDA) {
+      adjacentes.empilhar(new Coordenada(xAtual + 1, yAtual));
+      // this.PASSO = '↓';
+    }
+    char esquerda = yAtual == 0 ? PAREDE : this.mapa[xAtual][yAtual - 1];
+    if (esquerda == PASSAGEM || esquerda == SAIDA) {
+      adjacentes.empilhar(new Coordenada(xAtual, yAtual - 1));
+      // this.PASSO = '←';
+    }
+    char direita = yAtual == this.numColunas - 1 ? PAREDE : this.mapa[xAtual][yAtual + 1];
+    if (direita == PASSAGEM || direita == SAIDA) {
+      adjacentes.empilhar(new Coordenada(xAtual, yAtual + 1));
+      // this.PASSO = '→';
+    }
+    return adjacentes;
+  }
+
+  /**
+   * Modo progressivo do labirinto
+   * 
+   * Avança uma casa no labirinto
+   * 
+   * @param adjacentes Recebe as casas ao redor da casa atual
+   */
+  private void forward(Pilha<Coordenada> adjacentes) {
+    try {
+      this.atual = adjacentes.desempilhar();
+    } catch (NoSuchElementException e) {
+      this.avancar = false;
+    }
+    char casaAtual = this.mapa[this.atual.getLinha()][this.atual.getColuna()];
+    if (casaAtual == SAIDA) {
+      return;
+    }
+    this.mapa[this.atual.getLinha()][this.atual.getColuna()] = PASSO;
+    this.caminho.empilhar(this.atual);
+    this.possibilidades.empilhar(adjacentes);
+  }
+
+  /**
+   * Modo regressivo do labirinto
+   * 
+   * Volta uma casa no labirinto
+   * 
+   * @throws BuscaException Caso não exista caminho que leve a saída do labirinto
+   */
+  private void reverse() throws BuscaException {
+    try {
+      this.atual = this.caminho.desempilhar();
+    } catch (NoSuchElementException e) {
+      throw new BuscaException("Não há caminho que leve à saída!");
+    }
+    this.mapa[this.atual.getLinha()][this.atual.getColuna()] = PASSAGEM;
+    Pilha<Coordenada> adjacentes = this.possibilidades.exibeTopo();
+    if (adjacentes.pilhaVazia()) {
+      this.possibilidades.desempilhar();
+    } else {
+      this.atual = adjacentes.desempilhar();
+      this.mapa[this.atual.getLinha()][this.atual.getColuna()] = PASSO;
+      this.avancar = true;
+    }
   }
 
   public Coordenada getAtual() {

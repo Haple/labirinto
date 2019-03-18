@@ -1,6 +1,11 @@
-# Projeto Integrado C
+## Entrega projeto Labirinto - 14/03/2019
 
-# Primeiro trabalho: labirinto
+- Carregamento do arquivo com o mapa do labirinto;
+- Validações do arquivo;
+- Classe Coordenada;
+- Pilha dinâmica.
+
+# Projeto Integrado C 
 
 ## Documentações
 
