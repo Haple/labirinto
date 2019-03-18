@@ -8,6 +8,12 @@ import java.util.NoSuchElementException;
 
 import br.edu.puccampinas.projetoc.pilha.Pilha;
 
+/**
+ * Soluciona um labirinto carregado através de um arquivo de texto
+ * 
+ * @author aleph
+ *
+ */
 public class Labirinto {
 
   private final static char ENTRADA = 'E';
