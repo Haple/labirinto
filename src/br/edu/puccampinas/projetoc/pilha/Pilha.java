@@ -1,6 +1,5 @@
 package br.edu.puccampinas.projetoc.pilha;
 
-import java.util.Arrays;
 import java.util.NoSuchElementException;
 
 /**
@@ -11,59 +10,63 @@ import java.util.NoSuchElementException;
  * @param <T> Tipo da pilha
  */
 public class Pilha<T> {
-  private T[] vetor;
-  private int total;
-  private final int capacidadePadrao = 10;
 
   /**
-   * Constrói uma pilha com a capacidade inicial especificada
+   * Representa um nó de uma pilha
    * 
-   * @param capacidade Quantidade de posições que a pilha deve ter
+   * @author aleph
+   *
    */
-  @SuppressWarnings("unchecked")
-  public Pilha(int capacidade) {
-    this.vetor = (T[]) new Object[capacidade];
-    this.total = 0;
+  private class No {
+    T item;
+    No proximo;
+
+    public No(T item, Pilha<T>.No proximo) {
+      super();
+      this.item = item;
+      this.proximo = proximo;
+    }
+
+    public T getItem() {
+      return item;
+    }
+
+    public No getProximo() {
+      return proximo;
+    }
+
+    @Override
+    public String toString() {
+      return "No [item=" + item + ", proximo=" + proximo + "]";
+    }
   }
 
+  private No primeiro;
+  private int total;
+
   /**
-   * Constrói uma pilha com a capacidade inicial especificada
-   * 
-   * @param capacidade Quantidade de posições que a pilha deve ter
+   * Constrói uma pilha
    */
-  @SuppressWarnings("unchecked")
   public Pilha() {
-    this.vetor = (T[]) new Object[this.capacidadePadrao];
+    super();
+    this.primeiro = null;
     this.total = 0;
   }
 
   /**
    * Adiciona um valor no topo da pilha
    * 
-   * @param valor valor correspondente ao tipo da pilha
-   * @return true se o valor foi empilhado com sucesso, false caso contrário
+   * @param valor Correspondente ao tipo da pilha
+   * @return Devolve o valor empilhado
+   * @throws NullPointerException Caso o valor empilhado seja nulo
    */
   public T empilhar(T valor) {
-    if (this.total == this.vetor.length) {
-      this.setCapacidade(this.vetor.length * 2);
+    if (valor == null) {
+      throw new NullPointerException("Não é possível empilhar um item nulo!");
     }
-    this.vetor[this.total++] = valor;
-    return valor;
-  }
-
-  /**
-   * 
-   * @param capacidade throws IllegalArgumentException
-   */
-  @SuppressWarnings("unchecked")
-  private void setCapacidade(Integer capacidade) throws IllegalArgumentException {
-    if (capacidade < 1) {
-      throw new IllegalArgumentException(
-          "Não é possível criar uma pilha com capacidade menor que 1.");
-    }
-    T[] vetorTemp = (T[]) new Object[capacidade];
-    System.arraycopy(this.vetor, 0, vetorTemp, 0, this.total);
-    this.vetor = vetorTemp;
+    this.primeiro = new No(valor, this.primeiro);
+    this.total++;
+    return this.primeiro.getItem();
   }
 
   /**
@@ -76,7 +79,10 @@ public class Pilha<T> {
     if (this.total == 0) {
       throw new NoSuchElementException("Não é possível desempilhar uma pilha vazia!");
     }
-    return this.vetor[--this.total];
+    T atual = this.primeiro.getItem();
+    this.primeiro = this.primeiro.getProximo();
+    this.total--;
+    return atual;
   }
 
   /**
@@ -85,7 +91,7 @@ public class Pilha<T> {
    * @return true caso a pilha esteja vazia, false caso contrário
    */
   public boolean pilhaVazia() {
-    return (this.total == 0);
+    return (primeiro == null);
   }
 
   /**
@@ -98,7 +104,7 @@ public class Pilha<T> {
     if (this.total == 0) {
       throw new NoSuchElementException("Não é possível exibir o topo de uma pilha vazia!");
     }
-    return this.vetor[this.total - 1];
+    return this.primeiro.getItem();
   }
 
   public int getTotal() {
@@ -109,7 +115,7 @@ public class Pilha<T> {
   public int hashCode() {
     final int prime = 31;
     int result = 1;
-    result = prime * result + Arrays.deepHashCode(vetor);
+    result = prime * result + ((primeiro == null) ? 0 : primeiro.hashCode());
     result = prime * result + total;
     return result;
   }
@@ -122,8 +128,11 @@ public class Pilha<T> {
       return false;
     if (getClass() != obj.getClass())
       return false;
-    Pilha<?> other = (Pilha<?>) obj;
-    if (!Arrays.deepEquals(vetor, other.vetor))
+    Pilha other = (Pilha) obj;
+    if (primeiro == null) {
+      if (other.primeiro != null)
+        return false;
+    } else if (!primeiro.equals(other.primeiro))
       return false;
     if (total != other.total)
       return false;

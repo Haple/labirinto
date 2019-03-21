@@ -20,7 +20,7 @@ public class Labirinto {
   private final static char SAIDA = 'S';
   private final static char PASSAGEM = ' ';
   private final static char PAREDE = '#';
-  private final static char PASSO = '*';
+  private static char PASSO = '*';
   private boolean avancar = true;
 
   private Pilha<Coordenada> caminho;
@@ -48,8 +48,8 @@ public class Labirinto {
     } catch (NoSuchElementException e) {
       throw new CarregamentoException("Não foi possível encontrar a saída (S) do labirinto.");
     }
-    this.caminho = new Pilha<Coordenada>(numColunas * numLinhas);
-    this.possibilidades = new Pilha<Pilha<Coordenada>>(numColunas * numLinhas);
+    this.caminho = new Pilha<Coordenada>();
+    this.possibilidades = new Pilha<Pilha<Coordenada>>();
   }
 
   /**
@@ -152,28 +152,28 @@ public class Labirinto {
    * @return Devolve uma pilha com as cordenadas das casas adjacentes e válidas.
    */
   private Pilha<Coordenada> lookAround() {
-    Pilha<Coordenada> adjacentes = new Pilha<Coordenada>(3);
+    Pilha<Coordenada> adjacentes = new Pilha<Coordenada>();
     int xAtual = this.atual.getLinha();
     int yAtual = this.atual.getColuna();
     char acima = xAtual == 0 ? PAREDE : this.mapa[xAtual - 1][yAtual];
     if (acima == PASSAGEM || acima == SAIDA) {
       adjacentes.empilhar(new Coordenada(xAtual - 1, yAtual));
-      // this.PASSO = '↑';
+      PASSO = '↑';
     }
     char abaixo = xAtual == this.numLinhas - 1 ? PAREDE : this.mapa[xAtual + 1][yAtual];
     if (abaixo == PASSAGEM || abaixo == SAIDA) {
       adjacentes.empilhar(new Coordenada(xAtual + 1, yAtual));
-      // this.PASSO = '↓';
+      PASSO = '↓';
     }
     char esquerda = yAtual == 0 ? PAREDE : this.mapa[xAtual][yAtual - 1];
     if (esquerda == PASSAGEM || esquerda == SAIDA) {
       adjacentes.empilhar(new Coordenada(xAtual, yAtual - 1));
-      // this.PASSO = '←';
+      PASSO = '←';
     }
     char direita = yAtual == this.numColunas - 1 ? PAREDE : this.mapa[xAtual][yAtual + 1];
     if (direita == PASSAGEM || direita == SAIDA) {
       adjacentes.empilhar(new Coordenada(xAtual, yAtual + 1));
-      // this.PASSO = '→';
+      PASSO = '→';
     }
     return adjacentes;
   }
@@ -219,6 +219,7 @@ public class Labirinto {
       this.possibilidades.desempilhar();
     } else {
       this.atual = adjacentes.desempilhar();
+      this.lookAround();
       this.mapa[this.atual.getLinha()][this.atual.getColuna()] = PASSO;
       this.avancar = true;
     }
