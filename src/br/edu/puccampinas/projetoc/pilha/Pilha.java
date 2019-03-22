@@ -21,7 +21,7 @@ public class Pilha<T> {
     T item;
     No proximo;
 
-    public No(T item, Pilha<T>.No proximo) {
+    public No(T item, No proximo) {
       super();
       this.item = item;
       this.proximo = proximo;

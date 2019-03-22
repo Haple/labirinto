@@ -1,3 +1,11 @@
+## Entrega projeto Labirinto - 21/03/2019
+
+- Criado driver de testes orientado à objetos;
+- Modo progressivo;
+- Modo regressivo;
+- Pilha dinâmica usando nós;
+- Solução do labirinto escrita em um arquivo de saída.
+
 ## Entrega projeto Labirinto - 14/03/2019
 
 - Carregamento do arquivo com o mapa do labirinto;
