@@ -135,7 +135,6 @@ public class Labirinto {
   public void findExit() throws BuscaException {
     char casaAtual;
     do {
-      System.out.println(this.toString());
       Pilha<Coordenada> adjacentes = lookAround();
       if (this.avancar) {
         forward(adjacentes);
@@ -158,22 +157,18 @@ public class Labirinto {
     char acima = xAtual == 0 ? PAREDE : this.mapa[xAtual - 1][yAtual];
     if (acima == PASSAGEM || acima == SAIDA) {
       adjacentes.empilhar(new Coordenada(xAtual - 1, yAtual));
-//      PASSO = '↑';
     }
     char abaixo = xAtual == this.numLinhas - 1 ? PAREDE : this.mapa[xAtual + 1][yAtual];
     if (abaixo == PASSAGEM || abaixo == SAIDA) {
       adjacentes.empilhar(new Coordenada(xAtual + 1, yAtual));
-//      PASSO = '↓';
     }
     char esquerda = yAtual == 0 ? PAREDE : this.mapa[xAtual][yAtual - 1];
     if (esquerda == PASSAGEM || esquerda == SAIDA) {
       adjacentes.empilhar(new Coordenada(xAtual, yAtual - 1));
-//      PASSO = '←';
     }
     char direita = yAtual == this.numColunas - 1 ? PAREDE : this.mapa[xAtual][yAtual + 1];
     if (direita == PASSAGEM || direita == SAIDA) {
       adjacentes.empilhar(new Coordenada(xAtual, yAtual + 1));
-//      PASSO = '→';
     }
     return adjacentes;
   }

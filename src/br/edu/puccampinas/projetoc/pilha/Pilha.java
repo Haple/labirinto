@@ -1,5 +1,6 @@
 package br.edu.puccampinas.projetoc.pilha;
 
+import java.util.Arrays;
 import java.util.NoSuchElementException;
 
 /**
@@ -11,37 +12,8 @@ import java.util.NoSuchElementException;
  */
 public class Pilha<T> {
 
-  /**
-   * Representa um nó de uma pilha
-   * 
-   * @author aleph
-   *
-   */
-  private class No {
-    T item;
-    No proximo;
 
-    public No(T item, No proximo) {
-      super();
-      this.item = item;
-      this.proximo = proximo;
-    }
-
-    public T getItem() {
-      return item;
-    }
-
-    public No getProximo() {
-      return proximo;
-    }
-
-    @Override
-    public String toString() {
-      return "No [item=" + item + ", proximo=" + proximo + "]";
-    }
-  }
-
-  private No primeiro;
+  private No<T> primeiro;
   private int total;
 
   /**
@@ -51,6 +23,17 @@ public class Pilha<T> {
     super();
     this.primeiro = null;
     this.total = 0;
+  }
+
+  /**
+   * Constrói uma pilha baseado
+   * 
+   * @param outraPilha A pilha que deve ser copiada
+   */
+  public Pilha(Pilha<T> outraPilha) {
+    super();
+    this.primeiro = new No<T>(outraPilha.primeiro);
+    this.total = outraPilha.total;
   }
 
   /**
@@ -64,7 +47,7 @@ public class Pilha<T> {
     if (valor == null) {
       throw new NullPointerException("Não é possível empilhar um item nulo!");
     }
-    this.primeiro = new No(valor, this.primeiro);
+    this.primeiro = new No<T>(valor, this.primeiro);
     this.total++;
     return this.primeiro.getItem();
   }
@@ -128,7 +111,8 @@ public class Pilha<T> {
       return false;
     if (getClass() != obj.getClass())
       return false;
-    Pilha other = (Pilha) obj;
+    @SuppressWarnings("unchecked")
+    Pilha<T> other = (Pilha<T>) obj;
     if (primeiro == null) {
       if (other.primeiro != null)
         return false;
@@ -139,9 +123,25 @@ public class Pilha<T> {
     return true;
   }
 
+  /**
+   * Extrai para um vetor os elementos da pilha
+   * 
+   * @return Devolve um vetor com os elementos
+   */
+  private T[] getElements() {
+    T[] elements = (T[]) new Object[this.total];
+    No<T> aux = new No<T>(this.primeiro);
+    for (int i = elements.length - 1; i >= 0; i--) {
+      elements[i] = aux.getItem();
+      aux = aux.proximo;
+    }
+    return elements;
+  }
+
   @Override
   public String toString() {
-    return "Pilha [total=" + total + ", topo=" + (total > 0 ? this.exibeTopo() : "") + "]";
+    return "Pilha [total=" + total + ", topo=" + (total > 0 ? this.exibeTopo() : "")
+        + ", elementos=" + Arrays.toString(getElements()) + "]";
   }
 
 
