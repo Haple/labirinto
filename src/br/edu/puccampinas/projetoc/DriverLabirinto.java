@@ -50,7 +50,8 @@ public class DriverLabirinto {
       l.findExit();
       System.out.println("Labirinto: \n" + l);
       System.out.println("Coordenada da saída: " + l.getAtual());
-      bw.write(l.toString());
+      String solucao = l.toString();
+      bw.write(solucao.replaceAll(",", ""));
       System.out.println("Labirinto solucionado com sucesso! Confira o arquivo: " + arquivoSolucao);
     } catch (CarregamentoException e) {
       LOGGER.severe("Falha ao carregar o labirinto: " + e.getMessage());
