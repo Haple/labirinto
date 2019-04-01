@@ -13,7 +13,7 @@ import java.util.NoSuchElementException;
 public class Pilha<T> {
 
 
-  private No<T> primeiro;
+  private No primeiro;
   private int total;
 
   /**
@@ -32,7 +32,7 @@ public class Pilha<T> {
    */
   public Pilha(Pilha<T> outraPilha) {
     super();
-    this.primeiro = new No<T>(outraPilha.primeiro);
+    this.primeiro = outraPilha.primeiro;
     this.total = outraPilha.total;
   }
 
@@ -43,13 +43,13 @@ public class Pilha<T> {
    * @return Devolve o valor empilhado
    * @throws NullPointerException Caso o valor empilhado seja nulo
    */
-  public T empilhar(T valor) {
+  public Pilha<T> empilhar(T valor) {
     if (valor == null) {
       throw new NullPointerException("Não é possível empilhar um item nulo!");
     }
-    this.primeiro = new No<T>(valor, this.primeiro);
+    this.primeiro = new No(valor, this.primeiro);
     this.total++;
-    return this.primeiro.getItem();
+    return this;
   }
 
   /**
@@ -130,7 +130,7 @@ public class Pilha<T> {
    */
   private T[] getElements() {
     T[] elements = (T[]) new Object[this.total];
-    No<T> aux = new No<T>(this.primeiro);
+    No aux = this.primeiro;
     for (int i = elements.length - 1; i >= 0; i--) {
       elements[i] = aux.getItem();
       aux = aux.proximo;
@@ -140,10 +140,69 @@ public class Pilha<T> {
 
   @Override
   public String toString() {
-    return "Pilha [total=" + total + ", topo=" + (total > 0 ? this.exibeTopo() : "")
-        + ", elementos=" + Arrays.toString(getElements()) + "]";
+    return Arrays.toString(getElements());
   }
 
+  /**
+   * Representa um nó de uma pilha
+   * 
+   * @author aleph
+   *
+   */
+  private class No {
+    T item;
+    No proximo;
 
+    public No(T item, No proximo) {
+      super();
+      this.item = item;
+      this.proximo = proximo;
+    }
+
+    public T getItem() {
+      return item;
+    }
+
+    public No getProximo() {
+      return proximo;
+    }
+
+    @Override
+    public int hashCode() {
+      final int prime = 31;
+      int result = 1;
+      result = prime * result + ((item == null) ? 0 : item.hashCode());
+      result = prime * result + ((proximo == null) ? 0 : proximo.hashCode());
+      return result;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+      if (this == obj)
+        return true;
+      if (obj == null)
+        return false;
+      if (getClass() != obj.getClass())
+        return false;
+      @SuppressWarnings("unchecked")
+      No other = (No) obj;
+      if (item == null) {
+        if (other.item != null)
+          return false;
+      } else if (!item.equals(other.item))
+        return false;
+      if (proximo == null) {
+        if (other.proximo != null)
+          return false;
+      } else if (!proximo.equals(other.proximo))
+        return false;
+      return true;
+    }
+
+    @Override
+    public String toString() {
+      return "No [item=" + item + ", proximo=" + proximo + "]";
+    }
+  }
 
 }
