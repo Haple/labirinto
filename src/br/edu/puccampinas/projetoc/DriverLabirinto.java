@@ -54,12 +54,22 @@ public class DriverLabirinto {
       bw.write(solucao.replaceAll(",", "").replaceAll("\\[", "").replaceAll("\\]", ""));
       System.out.println("Labirinto solucionado com sucesso! Confira o arquivo: " + arquivoSolucao);
     } catch (CarregamentoException e) {
+      cleanOutput();
       LOGGER.severe("Falha ao carregar o labirinto: " + e.getMessage());
     } catch (IOException e) {
       LOGGER.severe("Erro ao criar arquivo de saída: " + e.getMessage());
     } catch (BuscaException e) {
+      cleanOutput();
       LOGGER.severe("O labirinto fornecido não possui solução!");
     }
+  }
+
+  /**
+   * Remove o arquivo de saída, em caso de erro
+   */
+  private void cleanOutput() {
+    File saida = new File(this.arquivoSolucao);
+    saida.delete();
   }
 
 }
