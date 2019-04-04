@@ -129,6 +129,7 @@ public class Pilha<T> {
    * @return Devolve um vetor com os elementos
    */
   private T[] getElements() {
+    @SuppressWarnings("unchecked")
     T[] elements = (T[]) new Object[this.total];
     No aux = this.primeiro;
     for (int i = elements.length - 1; i >= 0; i--) {
