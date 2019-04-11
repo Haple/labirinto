@@ -1,3 +1,11 @@
+## Entrega projeto Labirinto - 04/04/2019 (FINAL REVISADO)
+- Ajustado método "reverse" para usar o método "forward" antes de voltar ao modo progressivo;
+- Ajustado método "toString" para exibir o labirinto sem vírgulas e colchetes;
+- Adicionadas evidências dos testes pós revisão
+
+## Entrega projeto Labirinto - 04/04/2019 (FINAL)
+- Evidências dos testes
+
 ## Entrega projeto Labirinto - 21/03/2019
 
 - Criado driver de testes orientado à objetos;
@@ -17,7 +25,8 @@
 
 ## Documentações
 
-[Requisitos do trabalho](http://ead.puc-campinas.edu.br/access/content/group/21806303010107534201911/SI-PI-C-01-Explicacao_Projeto01.pdf)
+- [Requisitos do trabalho](https://github.com/Haple/labirinto/blob/master/SI-PI-C-01-Explicacao_Projeto01.pdf)
+- [Evidênciais dos testes](https://github.com/Haple/labirinto/blob/master/evidencias-pos-revisao.zip)
 
 ## Integrantes
 
