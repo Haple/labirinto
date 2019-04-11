@@ -1,4 +1,4 @@
-## Entrega projeto Labirinto - 04/04/2019 (FINAL REVISADO)
+## Entrega projeto Labirinto - 11/04/2019 (FINAL REVISADO)
 - Ajustado método "reverse" para usar o método "forward" antes de voltar ao modo progressivo;
 - Ajustado método "toString" para exibir o labirinto sem vírgulas e colchetes;
 - Adicionadas evidências dos testes pós revisão
