@@ -213,9 +213,7 @@ public class Labirinto {
     if (adjacentes.pilhaVazia()) {
       this.possibilidades.desempilhar();
     } else {
-      this.atual = adjacentes.desempilhar();
-      this.lookAround();
-      this.mapa[this.atual.getLinha()][this.atual.getColuna()] = PASSO;
+      forward(this.possibilidades.desempilhar());
       this.avancar = true;
     }
   }
@@ -230,7 +228,7 @@ public class Labirinto {
     for (char[] linha : this.mapa) {
       mapa += Arrays.toString(linha) + "\n";
     }
-    return mapa;
+    return mapa.replaceAll(",", "").replaceAll("\\[", "").replaceAll("\\]", "");
   }
 
 }
