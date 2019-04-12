@@ -44,7 +44,7 @@ public class DriverLabirinto {
   /**
    * Inicializa o processamento do labirinto
    */
-  public void run() {
+  public void start() {
     try (BufferedWriter bw = new BufferedWriter(new FileWriter(arquivoSolucao))) {
       Labirinto l = new Labirinto(mapaLabirinto);
       l.findExit();
@@ -69,6 +69,55 @@ public class DriverLabirinto {
   private void cleanOutput() {
     File saida = new File(this.arquivoSolucao);
     saida.delete();
+  }
+
+  @Override
+  public int hashCode() {
+    final int prime = 31;
+    int result = 1;
+    result = prime * result + ((arquivoSolucao == null) ? 0 : arquivoSolucao.hashCode());
+    result = prime * result + ((mapaLabirinto == null) ? 0 : mapaLabirinto.hashCode());
+    result = prime * result + ((nomeArquivo == null) ? 0 : nomeArquivo.hashCode());
+    result = prime * result + ((pastaSolucao == null) ? 0 : pastaSolucao.hashCode());
+    return result;
+  }
+
+  @Override
+  public boolean equals(Object obj) {
+    if (this == obj)
+      return true;
+    if (obj == null)
+      return false;
+    if (getClass() != obj.getClass())
+      return false;
+    DriverLabirinto other = (DriverLabirinto) obj;
+    if (arquivoSolucao == null) {
+      if (other.arquivoSolucao != null)
+        return false;
+    } else if (!arquivoSolucao.equals(other.arquivoSolucao))
+      return false;
+    if (mapaLabirinto == null) {
+      if (other.mapaLabirinto != null)
+        return false;
+    } else if (!mapaLabirinto.equals(other.mapaLabirinto))
+      return false;
+    if (nomeArquivo == null) {
+      if (other.nomeArquivo != null)
+        return false;
+    } else if (!nomeArquivo.equals(other.nomeArquivo))
+      return false;
+    if (pastaSolucao == null) {
+      if (other.pastaSolucao != null)
+        return false;
+    } else if (!pastaSolucao.equals(other.pastaSolucao))
+      return false;
+    return true;
+  }
+
+  @Override
+  public String toString() {
+    return "DriverLabirinto [mapaLabirinto=" + mapaLabirinto + ", pastaSolucao=" + pastaSolucao
+        + ", nomeArquivo=" + nomeArquivo + ", arquivoSolucao=" + arquivoSolucao + "]";
   }
 
 }

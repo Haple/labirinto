@@ -30,7 +30,7 @@ public class ProjetoC {
       LOGGER.severe("Erro ao processar caminho do mapa: " + e.getMessage());
     }
     DriverLabirinto driverLabirinto = new DriverLabirinto(mapaLabirinto);
-    driverLabirinto.run();
+    driverLabirinto.start();
   }
 
 }

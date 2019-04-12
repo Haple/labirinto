@@ -20,7 +20,7 @@ public class Labirinto {
   private final static char SAIDA = 'S';
   private final static char PASSAGEM = ' ';
   private final static char PAREDE = '#';
-  private final static char PASSO = '*';
+  private final static char PASSO = '•';
   private boolean avancar = true;
 
   private Pilha<Coordenada> caminho;
@@ -220,6 +220,61 @@ public class Labirinto {
 
   public Coordenada getAtual() {
     return atual;
+  }
+
+  @Override
+  public int hashCode() {
+    final int prime = 31;
+    int result = 1;
+    result = prime * result + ((atual == null) ? 0 : atual.hashCode());
+    result = prime * result + (avancar ? 1231 : 1237);
+    result = prime * result + ((caminho == null) ? 0 : caminho.hashCode());
+    result = prime * result + Arrays.deepHashCode(mapa);
+    result = prime * result + ((numColunas == null) ? 0 : numColunas.hashCode());
+    result = prime * result + ((numLinhas == null) ? 0 : numLinhas.hashCode());
+    result = prime * result + ((possibilidades == null) ? 0 : possibilidades.hashCode());
+    return result;
+  }
+
+  @Override
+  public boolean equals(Object obj) {
+    if (this == obj)
+      return true;
+    if (obj == null)
+      return false;
+    if (getClass() != obj.getClass())
+      return false;
+    Labirinto other = (Labirinto) obj;
+    if (atual == null) {
+      if (other.atual != null)
+        return false;
+    } else if (!atual.equals(other.atual))
+      return false;
+    if (avancar != other.avancar)
+      return false;
+    if (caminho == null) {
+      if (other.caminho != null)
+        return false;
+    } else if (!caminho.equals(other.caminho))
+      return false;
+    if (!Arrays.deepEquals(mapa, other.mapa))
+      return false;
+    if (numColunas == null) {
+      if (other.numColunas != null)
+        return false;
+    } else if (!numColunas.equals(other.numColunas))
+      return false;
+    if (numLinhas == null) {
+      if (other.numLinhas != null)
+        return false;
+    } else if (!numLinhas.equals(other.numLinhas))
+      return false;
+    if (possibilidades == null) {
+      if (other.possibilidades != null)
+        return false;
+    } else if (!possibilidades.equals(other.possibilidades))
+      return false;
+    return true;
   }
 
   @Override
